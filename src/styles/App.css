@@ -1,0 +1,13 @@
+.App {
+  text-align: center;
+   color: blue ; 
+}
+.App .h1 {
+  text-align: center;
+}
+.Sbtn {
+  text-align: center;
+  color: aquamarine;
+  font-size: large;
+  text-decoration: solid;
+}

@@ -43,6 +43,7 @@ class App extends Component {
         <Modal show={this.state.show} animation={true} onHide={() => this.handleModal()}>
           <Modal.Header>{this.props.Content.modalPopup}</Modal.Header>
           <Modal.Body>
+            <p>{this.props.Content.textMatter}</p>
             <input
               handleOnChange={(e) => this.handleOnChange(e)}
               type="text"
@@ -63,6 +64,8 @@ class App extends Component {
                 </Router>
             </Modal.Body>
           <Modal.Footer>
+            <Button >{this.props.Content.saveButton}</Button>
+            <Button onClick={() => this.handleModal()}>{this.props.Content.cancelButton} </Button>
           </Modal.Footer>
         </Modal>
       </div>

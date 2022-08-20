@@ -1,9 +1,11 @@
 const mock = {
+    textMatter: "Enter the Name of the segment",
     heading: "Skill Assessment",
     saveSegment:"Save Segment",
     modalPopup: "Popup",
     placeholder: "Name of the Segment",
-    regionDropdownLabel : "",
+    saveButton: "Save the Segment",
+    cancelButton: "Cancel",
     regionDropDown:[
         {
             id:"",

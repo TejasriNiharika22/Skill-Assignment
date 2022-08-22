@@ -11,7 +11,8 @@ class App extends Component {
       show: false,
       schemaList: [],
       segmentName: "",
-      currentSchemaItem: {}
+      currentSchemaItem: {},
+      disableButton: true
     }
   }
   handleModal() {
@@ -22,15 +23,15 @@ class App extends Component {
     this.handleModal();
   }
   onEditClick = (value) => {
-  const list = this.props.Content.regionDropDown;
-   const item = list.find((val) => {
+    const list = this.props.Content.listOfOptions;
+    const item = list.find((val) => {
       return val.id === value;
-   });
-  console.log(item);
+    });
+    console.log(item);
     this.setState({ currentSchemaItem: item });
   }
 
-  
+
   handleDropdownChange = (e) => {
     console.log(e.target.value);
     e.preventDefault();
@@ -44,25 +45,27 @@ class App extends Component {
     });
   }
 
-  removeItem = (item) => {
-    // TODO need to write
+  deleteItem = (item) => {
+    let index = this.state.schemaList.map(element => element.task).indexOf(item);
+    this.state.schemaList.splice(index, 1);
+    this.setState({ schemaList: this.state.schemaList });
   }
 
   renderSchemaItem = (item, index) => {
-    const list = this.props.Content.regionDropDown;
+    const list = this.props.Content.listOfOptions;
 
     return <div key={index}>
-       <select ref={this.myRef} style={{ textAlign: "center", color: "green", width: "300px" }} value={item.id} onChange={(e) => this.handleDropdownChange(e)}>
-            {list.map((listItem, listIndex) => {
-                return <option key={listIndex} value={listItem.id}>{listItem.name}</option>
-            })}
-       </select>
-       <Button onClick={(item) => { this.removeItem(item)}}>-</Button>
+      <select ref={this.myRef} style={{ textAlign: "center", color: "green", width: "300px" }} value={item.id} onChange={(e) => this.handleDropdownChange(e)}>
+        {list.map((listItem, listIndex) => {
+          return <option key={listIndex} value={listItem.id}>{listItem.name}</option>
+        })}
+      </select>
+      <Button onClick={(item) => { this.deleteItem(item) }}>-</Button>
     </div>
   }
 
   renderListItems = () => {
-    const {schemaList = []} = this.state;
+    const { schemaList = [] } = this.state;
     const schemaItems = schemaList.map((item, index) => {
       console.log(item);
       return this.renderSchemaItem(item, index)
@@ -71,9 +74,9 @@ class App extends Component {
   }
 
   addColumnToSchema = () => {
-    const {currentSchemaItem = {}, schemaList = [] } = this.state;
+    const { currentSchemaItem = {}, schemaList = [] } = this.state;
     console.log(this.state);
-    if(currentSchemaItem){
+    if (currentSchemaItem) {
       schemaList.push(currentSchemaItem);
       this.setState({
         schemaList: schemaList,
@@ -82,18 +85,27 @@ class App extends Component {
         console.log(this.state);
       });
     }
-  
+
   }
 
 
+  saveSegment = () => {
+    console.log("saveclicked");
+    if (this.state.segmentName === "") {
+      this.setState({
+        disableButton: false
+      })
+    }
+  }
 
- 
   render() {
-    let regionDropDown = this.props.Content.regionDropDown;
-    let { currentSchemaItem} = this.state;
-    let options = regionDropDown.map((data, index) =>
+    let listOfOptions = this.props.Content.listOfOptions;
+    let { currentSchemaItem } = this.state;
+    let options = listOfOptions.map((data, index) =>
       <option key={index} value={data.id}>{data.name}</option>)
-  
+
+    const { segmentName } = this.state;
+    const isEnabled = segmentName.length > 0;
     return (
       <div>
         <h1 style={{ textAlign: "center" }}>{this.props.Content.heading}</h1>
@@ -113,20 +125,20 @@ class App extends Component {
             <br />
             {this.renderListItems()}
             <br />
-                <select ref={this.myRef} style={{ textAlign: "center", color: "green", width: "300px" }} value={currentSchemaItem?.id ?? ""} onChange={(e) => this.handleDropdownChange(e)}>
-                  {options}
-                </select>
-                <br />
-                <br />
-                <ul>
-                  <Button onClick = {() => {this.addColumnToSchema()}}  variant={"link"} >
-                  +Add new schema
-                  </Button>
-                </ul>
+            <select ref={this.myRef} style={{ textAlign: "center", color: "green", width: "300px" }} value={currentSchemaItem?.id ?? ""} onChange={(e) => this.handleDropdownChange(e)}>
+              {options}
+            </select>
+            <br />
+            <br />
+            <ul>
+              <Button disabled={!isEnabled} onClick={() => { this.addColumnToSchema() }} variant={"link"} >
+                +Add new schema
+              </Button>
+            </ul>
 
-            </Modal.Body>
+          </Modal.Body>
           <Modal.Footer>
-            <Button >{this.props.Content.saveButton}</Button>
+            <Button disabled={!isEnabled} onClick={() => { this.saveSegment() }}>{this.props.Content.saveButton}</Button>
             <Button onClick={() => this.handleModal()}>{this.props.Content.cancelButton} </Button>
           </Modal.Footer>
         </Modal>

@@ -12,9 +12,10 @@ class App extends Component {
       schemaList: [],
       segmentName: "",
       currentSchemaItem: {},
-      disableButton: true
+      disableButton: true,
     }
   }
+ 
   handleModal() {
     this.setState({ show: !this.state.show })
   }
@@ -60,7 +61,7 @@ class App extends Component {
           return <option key={listIndex} value={listItem.id}>{listItem.name}</option>
         })}
       </select>
-      <Button onClick={(item) => { this.deleteItem(item) }}>-</Button>
+      <Button variant="light" onClick={(item) => { this.deleteItem(item) }}>-</Button>
     </div>
   }
 
@@ -88,14 +89,8 @@ class App extends Component {
 
   }
 
-
   saveSegment = () => {
     console.log("saveclicked");
-    if (this.state.segmentName === "") {
-      this.setState({
-        disableButton: false
-      })
-    }
   }
 
   render() {
@@ -110,12 +105,13 @@ class App extends Component {
       <div>
         <h1 style={{ textAlign: "center" }}>{this.props.Content.heading}</h1>
         <div>
-          <Button onClick={() => this.handleEdit()} >{this.props.Content.saveSegment}</Button>
+          <Button variant="primary" onClick={() => this.handleEdit()}>{this.props.Content.saveSegment}</Button>
         </div>
+
         <Modal show={this.state.show} animation={true} onHide={() => this.handleModal()}>
           <Modal.Header>{this.props.Content.modalPopup}</Modal.Header>
           <Modal.Body>
-            <p>{this.props.Content.textMatter}</p>
+            <p><b>{this.props.Content.textMatter}</b></p>
             <input
               onBlur={(e) => this.handleSegmentNameChange(e)}
               type="text"
@@ -138,8 +134,8 @@ class App extends Component {
 
           </Modal.Body>
           <Modal.Footer>
-            <Button disabled={!isEnabled} onClick={() => { this.saveSegment() }}>{this.props.Content.saveButton}</Button>
-            <Button onClick={() => this.handleModal()}>{this.props.Content.cancelButton} </Button>
+            <Button variant="success" disabled={!isEnabled} onClick={() => { this.saveSegment() }}>{this.props.Content.saveButton}</Button>
+            <Button  variant="danger" onClick={() => this.handleModal()}>{this.props.Content.cancelButton} </Button>
           </Modal.Footer>
         </Modal>
       </div>
